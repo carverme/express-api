@@ -1,0 +1,22 @@
+[
+{
+"make": "Ford",
+"model": "f-150"
+},
+{
+"make": "Dodge",
+"model": "ram"
+},
+{
+"make": "Honda",
+"model": "civic"
+},
+{
+"make": "Mercedes-Benz",
+"model": "c300"
+},
+{
+"make": "Toyota",
+"model": "Camry"
+}
+]
