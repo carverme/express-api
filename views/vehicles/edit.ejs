@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Edit Page</title>
+  </head>
+  <body>
+    <h1>Please edit this vehicle:</h1>
+      <form action="/vehicles/<%= id %>" method="post">
+        <input type="text" name="make" value="<% vehicle.make %>" /><br />
+        <input type="text" name="model" value="<% vehicle.model %>" /><br />
+        <input type="submit" value="Update!" />
+      </form>
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+      <script src="/js/script.js"></script>
+  </body>
+</html>

@@ -9,13 +9,21 @@ var app = express();
 app.use(express.static(path.join(__dirname, 'static')));
 app.set('view engine', 'ejs');
 app.use(bp.urlencoded({extended: true}));
-app.use(ejsLayouts);
+//app.use(ejsLayouts);
 
-//get vehicles, returns all vehicles
+//get vehicles, returns ALL vehicles
 app.get('/vehicles', function(req, res) {
   var vehicles = fs.readFileSync('./data.json');
   vehicles = JSON.parse(vehicles);
-  res.json(vehicles);
+  res.render('vehicles/index', {vehicles: vehicles});
+});
+
+
+//This and the post work together...
+//GET /vehicles/new - return the form for adding (CREATE)
+app.get('/vehicles/new', function(req, res) {
+  console.log("hit the vehicles/new route");
+  res.render('vehicles/new');
 });
 
 //POST /vehicles - adds a new vehicle.
@@ -25,7 +33,7 @@ app.post('/vehicles', function(req, res) {
   vehicles = JSON.parse(vehicles);
   vehicles.push( {make: req.body.make, model: req.body.model} );
   fs.writeFileSync('./data.json', JSON.stringify(vehicles));
-  res.json(vehicles);
+  res.redirect('/vehicles');
 });
 
 //For specific ID access, include the route in the url... from the
@@ -37,11 +45,19 @@ app.get('/vehicles/:id', function(req, res) {
   if (vehicleIndex >= vehicles.length) {
       res.json({make: null, model: null});
   } else {
-    res.json(vehicles[vehicleIndex]);
+    console.log(vehicles[vehicleIndex])
+    res.render('vehicles/show', {vehicle: vehicles[vehicleIndex]});
   }
 });
 
-//Updates a specific item from an array
+//GET vehicles/:id to get one and works with the PUT below...
+app.get('/vehicles/:id/edit', function(req, res) {
+  var vehicles = fs.readFileSync('./data.json');
+  vehicles = JSON.parse(vehicles);
+  res.render('vehicles/edit', {vehicle: vehicles[req.params.id], id: req.params.id});  //or id: req.params.id
+});
+
+//PUT/Updates a specific item from an array
 app.put('/vehicles/:id', function(req, res) {
   var vehicles = fs.readFileSync('./data.json');
   vehicles = JSON.parse(vehicles);
@@ -54,7 +70,6 @@ app.put('/vehicles/:id', function(req, res) {
     fs.writeFileSync('./data.json', JSON.stringify(vehicles));
     res.json(vehicles);
   }
-
 });
 //Deletes a specific item from an array
 app.delete('/vehicles/:id', function(req, res) {
