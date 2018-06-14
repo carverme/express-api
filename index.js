@@ -28,7 +28,8 @@ app.post('/vehicles', function(req, res) {
   res.json(vehicles);
 });
 
-
+//For specific ID access, include the route in the url... from the
+//Gets a specific item from an array.
 app.get('/vehicles/:id', function(req, res) {
   var vehicles = fs.readFileSync('./data.json');
   vehicles = JSON.parse(vehicles);
@@ -40,19 +41,22 @@ app.get('/vehicles/:id', function(req, res) {
   }
 });
 
+//Updates a specific item from an array
 app.put('/vehicles/:id', function(req, res) {
   var vehicles = fs.readFileSync('./data.json');
   vehicles = JSON.parse(vehicles);
   var vehicleIndex = req.params.id;
-  vehicles[vehicleIndex].make = req.body.make;
-  vehicles[vehicleIndex].model = req.body.model;
-  fs.writeFileSync('./data.json', JSON.stringify(vehicles));
-  res.json(vehicles);
   if (vehicleIndex >= vehicles.length) {
     res.json({make: null, model: null});
+  } else {
+    vehicles[vehicleIndex].make = req.body.make;
+    vehicles[vehicleIndex].model = req.body.model;
+    fs.writeFileSync('./data.json', JSON.stringify(vehicles));
+    res.json(vehicles);
   }
-});
 
+});
+//Deletes a specific item from an array
 app.delete('/vehicles/:id', function(req, res) {
   var vehicles = fs.readFileSync('./data.json');
   vehicles = JSON.parse(vehicles);
